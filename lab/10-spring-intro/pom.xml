@@ -13,6 +13,12 @@
         <version>5.3.23</version>
     </parent>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.spring.training.core-spring</groupId>
             <artifactId>00-rewards-common</artifactId>
