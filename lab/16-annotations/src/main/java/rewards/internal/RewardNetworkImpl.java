@@ -10,6 +10,10 @@ import rewards.internal.restaurant.Restaurant;
 import rewards.internal.restaurant.RestaurantRepository;
 import rewards.internal.reward.RewardRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import common.money.MonetaryAmount;
 
 /**
@@ -31,12 +35,17 @@ import common.money.MonetaryAmount;
  *   injection or constructor injection.
  */
 
+@Service
+@Component
 public class RewardNetworkImpl implements RewardNetwork {
 
+	@Autowired
 	private AccountRepository accountRepository;
 
+	@Autowired
 	private RestaurantRepository restaurantRepository;
 
+	@Autowired
 	private RewardRepository rewardRepository;
 
 	/**
@@ -45,6 +54,7 @@ public class RewardNetworkImpl implements RewardNetwork {
 	 * @param restaurantRepository the repository for loading restaurants that determine how much to reward
 	 * @param rewardRepository the repository for recording a record of successful reward transactions
 	 */
+
 	
 	public RewardNetworkImpl(AccountRepository accountRepository, RestaurantRepository restaurantRepository,
 			RewardRepository rewardRepository) {

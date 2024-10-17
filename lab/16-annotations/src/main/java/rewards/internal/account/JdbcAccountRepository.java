@@ -2,8 +2,12 @@ package rewards.internal.account;
 
 import common.money.MonetaryAmount;
 import common.money.Percentage;
-import org.springframework.dao.EmptyResultDataAccessException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,13 +18,14 @@ import java.sql.SQLException;
  * Loads accounts from a data source using the JDBC API.
  */
 
-/* TODO-05: Let this class to be found in component-scanning
+/*
+ * TODO-05: Let this class to be found in component-scanning
  * - Annotate the class with an appropriate stereotype annotation
- *   to cause component-scan to detect and load this bean.
+ * to cause component-scan to detect and load this bean.
  * - Inject dataSource by annotating setDataSource() method
- *   with @Autowired.
+ * with @Autowired.
  */
-
+@Repository
 public class JdbcAccountRepository implements AccountRepository {
 
 	private DataSource dataSource;
@@ -30,6 +35,8 @@ public class JdbcAccountRepository implements AccountRepository {
 	 *
 	 * @param dataSource the data source
 	 */
+
+	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -113,7 +120,8 @@ public class JdbcAccountRepository implements AccountRepository {
 	 *
 	 * @param rs the set of rows returned from the query
 	 * @return the mapped Account aggregate
-	 * @throws SQLException an exception occurred extracting data from the result set
+	 * @throws SQLException an exception occurred extracting data from the result
+	 *                      set
 	 */
 	private Account mapAccount(ResultSet rs) throws SQLException {
 		Account account = null;
@@ -135,11 +143,13 @@ public class JdbcAccountRepository implements AccountRepository {
 	}
 
 	/**
-	 * Maps the beneficiary columns in a single row to an AllocatedBeneficiary object.
+	 * Maps the beneficiary columns in a single row to an AllocatedBeneficiary
+	 * object.
 	 *
 	 * @param rs the result set with its cursor positioned at the current row
 	 * @return an allocated beneficiary
-	 * @throws SQLException an exception occurred extracting data from the result set
+	 * @throws SQLException an exception occurred extracting data from the result
+	 *                      set
 	 */
 	private Beneficiary mapBeneficiary(ResultSet rs) throws SQLException {
 		String name = rs.getString("BENEFICIARY_NAME");

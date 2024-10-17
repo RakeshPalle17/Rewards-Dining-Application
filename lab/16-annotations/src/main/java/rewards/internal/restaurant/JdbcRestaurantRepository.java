@@ -1,8 +1,14 @@
 package rewards.internal.restaurant;
 
 import common.money.Percentage;
-import org.springframework.dao.EmptyResultDataAccessException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,7 +49,7 @@ import java.util.Map;
  *   understand why. (If not, refer to lab document).
  *   We will fix this error in the next step.
  */
-
+@Repository
 public class JdbcRestaurantRepository implements RestaurantRepository {
 
 	private DataSource dataSource;
@@ -59,7 +65,6 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 * restaurants. When the instance of JdbcRestaurantRepository is created, a
 	 * Restaurant cache is populated for read only access
 	 */
-
 	public JdbcRestaurantRepository(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.populateRestaurantCache();
@@ -68,6 +73,8 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	public JdbcRestaurantRepository() {
 	}
 
+	
+	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
@@ -92,6 +99,7 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 *   the constructor, is a better practice.
 	 */
 
+	@PostConstruct
 	void populateRestaurantCache() {
 		restaurantCache = new HashMap<String, Restaurant>();
 		String sql = "select MERCHANT_NUMBER, NAME, BENEFIT_PERCENTAGE from T_RESTAURANT";
@@ -166,8 +174,12 @@ public class JdbcRestaurantRepository implements RestaurantRepository {
 	 * - Re-run the test and you should be able to see
 	 *   that this method is now being called.
 	 */
+
+	@PreDestroy
 	public void clearRestaurantCache() {
+		System.out.println("clearRestaurantCache invoked");
 		restaurantCache.clear();
+
 	}
 
 	/**
